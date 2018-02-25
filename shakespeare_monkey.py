@@ -9,11 +9,13 @@
 
 import string
 import random
+import time
 
 
 def generate_rand():
 
     res = random.choices(string.ascii_lowercase + " ", k=27)
+    # res = list("methinks it is like a weasel")
     return res
 
 
@@ -24,16 +26,24 @@ def score_rand(test):
 
 
 def run_test():
-    test_num = 0
+
     while True:
         monkey = generate_rand()
-        if score_rand(monkey) < 27:
-            test_num += 1
-        else:
+        start_time = time.time()
+
+        if score_rand(monkey) >= 13:
+            print("Got thirteen")
+            print("--- %s seconds ---" (time.time() - start_time()))
+            break
+        elif 15 <= score_rand(monkey) <= 19:
+            print("Not bad.")
+        elif 20 <= score_rand(monkey) <= 24:
+            print("Almost There!!")
+        elif 25 <= score_rand(monkey) < 27:
+            print("HNNNGGGGGHHH!")
+        elif score_rand(monkey) == 27:
             print("Success")
             break
-
-        print(str(test_num) + "000 iterations completed")
 
 
 run_test()
