@@ -7,43 +7,46 @@
 # progress this third function should print out the best string generated so far and its score every 1000 tries.
 
 
-import string
 import random
-import time
 
 
-def generate_rand():
+def generate_rand(strlen):
+    alphabet = "abcdefghijklmnopqrstuvwxyz "
+    res = ""
+    for i in range(strlen):
+        res = res + alphabet[random.randrange(27)]
 
-    res = random.choices(string.ascii_lowercase + " ", k=27)
-    # res = list("methinks it is like a weasel")
     return res
 
 
-def score_rand(test):
-    goal = list("methinks it is like a weasel")
-    score = len([i for i, j in zip(goal, test) if i == j])
-    return score
+def score_rand(goal, teststring):
+    numSame = 0
+    for i in range(len(goal)):
+        if goal[i] == teststring[i]:
+            numSame += 1
+        return numSame / len(goal)
 
 
-def run_test():
+def main():
 
-    while True:
-        monkey = generate_rand()
-        start_time = time.time()
+    run_count = 0
+    goalstring = "methinks it is a weasel"
+    newstring = generate_rand(28)
+    best = 0
+    newscore = score_rand(goalstring, newstring)
 
-        if score_rand(monkey) >= 13:
-            print("Got thirteen")
-            print("--- %s seconds ---" (time.time() - start_time()))
-            break
-        elif 15 <= score_rand(monkey) <= 19:
-            print("Not bad.")
-        elif 20 <= score_rand(monkey) <= 24:
-            print("Almost There!!")
-        elif 25 <= score_rand(monkey) < 27:
-            print("HNNNGGGGGHHH!")
-        elif score_rand(monkey) == 27:
-            print("Success")
-            break
+    while newscore < 1:
+        if newscore > best:
+            print(newscore, newstring)
+            best = newscore
+        newstring = generate_rand(28)
+        newscore = score_rand(goalstring, newstring)
+        run_count += 1
+
+    if run_count % 1000000 == 1:
+        print(run_count) + "cycles completed."
+
+    print("Success")
 
 
-run_test()
+main()
